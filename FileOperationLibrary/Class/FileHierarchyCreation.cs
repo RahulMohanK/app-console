@@ -1,6 +1,6 @@
 using System;
-
-namespace FileOpearionLibrary
+using System.Xml;
+namespace FileOperationLibrary
 {
     public class FileHierarchyCreation
     {
@@ -18,15 +18,19 @@ namespace FileOpearionLibrary
             }
         }
 
-        public void CreateApplicationFolder(int appId, string categoryName, string projectName)
+        public void CreateApplicationFolder(int appId, string categoryName, string projectName, string fileName)
         {
+
 
             string applicationPath = rootPath + "/" + projectName + "/" + categoryName + "/" + Convert.ToString(appId);
             Console.WriteLine(applicationPath);
             CreateCategoryFolder(projectName, categoryName);
             if (FileExists(applicationPath) == false)
-            {    
+            {
                 System.IO.Directory.CreateDirectory(applicationPath);
+                FileOperationLibrary.ManifestXml manifest = new FileOperationLibrary.ManifestXml();
+                manifest.CreateManifest(applicationPath, applicationPath + "/" + fileName, "com.jhd", Convert.ToString(appId), projectName);
+
             }
 
         }
@@ -50,5 +54,7 @@ namespace FileOpearionLibrary
             }
             return false;
         }
+
+
     }
 }

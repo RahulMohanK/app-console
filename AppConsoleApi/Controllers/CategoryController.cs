@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AppConsoleApi.Models;
 using DatabaseOperationLibrary;
-using FileOpearionLibrary;
+using FileOperationLibrary;
 using ModelLibrary;
 
 namespace AppConsoleApi.Controllers

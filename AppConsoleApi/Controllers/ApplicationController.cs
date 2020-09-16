@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using  AppConsoleApi.Models;
 using DatabaseOperationLibrary;
-using FileOpearionLibrary;
+using FileOperationLibrary;
 using model = ModelLibrary;
 
 namespace AppConsoleApi.Controllers
@@ -55,7 +55,7 @@ namespace AppConsoleApi.Controllers
             application = db1.getSingleApplication(app.ProjectName, app.CategoryName, app.FileName);
 
             FileHierarchyCreation file = new FileHierarchyCreation();
-            file.CreateApplicationFolder(application.AppId, app.CategoryName, app.ProjectName);
+            file.CreateApplicationFolder(application.AppId, app.CategoryName, app.ProjectName,app.FileName);
 
             return StatusCode(200);
 
