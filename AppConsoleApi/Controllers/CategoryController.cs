@@ -47,21 +47,21 @@ namespace AppConsoleApi.Controllers
         {
             DatabaseOperation db = new DatabaseOperation();
             db.AddCategory(category.CategoryName);
-            return StatusCode(200);
+            return StatusCode(200, new{ title = "Category added successfully.", status = 200 });
         }
 
         [HttpDelete("{categoryName}")]
         [ActionName("deleteCategory")]
         public ActionResult<AppConsoleApi.Models.Category> DeleteCategory(string categoryName)
-        {
-            var category = context.Category.FirstOrDefault(e=> e.CategoryName == categoryName);
-            if(category == null)
+        {   
+            
+            if(!CategoryExists(categoryName))
             {
                 return NotFound();
             }
             DatabaseOperation db = new DatabaseOperation();
             db.deleteCategory(categoryName);
-            return category;
+            return StatusCode(200,new { title = "Applicaton deleted successfully.", status = 200 });
         }
 
 
@@ -77,7 +77,7 @@ namespace AppConsoleApi.Controllers
             DatabaseOperation db = new DatabaseOperation();
             db.UpdateCategory(oldCategoryName,category.CategoryName);
 
-            return StatusCode(200);
+            return StatusCode(200, new{ title = "Category updated successfully.", status = 200 });
         }
  
         private bool CategoryExists(string categoryName)

@@ -29,7 +29,7 @@ namespace AppConsoleApi.Controllers
         public  ActionResult<IEnumerable<ModelLibrary.Project>> GetProject()
         {
             DatabaseOperation db = new DatabaseOperation();
-            return  db.getProjects();
+            return db.getProjects();
         }
 
 
@@ -55,21 +55,21 @@ namespace AppConsoleApi.Controllers
             FileHierarchyCreation file = new FileHierarchyCreation();
             file.CreateProjectFolder(project.ProjectName);
 
-            return StatusCode(200);
+            return StatusCode(200,new { title = "Project added successfully.", status = 200 });
 
         }
 
         [HttpDelete("{projectName}")]
         public  ActionResult<AppConsoleApi.Models.Project> DeleteProject(string projectName)
         {
-            var project = context.Project.FirstOrDefault(e => e.ProjectName == projectName);
-            if(project == null)
+            
+            if(!ProjectExists(projectName))
             {
                 return NotFound();
             }
             DatabaseOperation db = new DatabaseOperation();
             db.deleteProject(projectName);
-            return project;
+            return StatusCode(200,new { title = "Deletion successfull.", status = 200 });
         }
 
 
@@ -83,7 +83,7 @@ namespace AppConsoleApi.Controllers
             DatabaseOperation db = new DatabaseOperation();
             db.UpdateProject(oldProjectName,project.ProjectName,project.BundleIdentifier);
 
-            return StatusCode(200);
+            return StatusCode(200, new{ title = "Project updated successfully.", status = 200 });
         }
      
         private bool ProjectExists(string projectName)

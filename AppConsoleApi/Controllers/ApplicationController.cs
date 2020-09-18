@@ -59,37 +59,28 @@ namespace AppConsoleApi.Controllers
             FileHierarchyCreation file = new FileHierarchyCreation();
             file.CreateApplicationFolder(application.AppId, app.CategoryName, app.ProjectName,app.FileName);
 
-            return StatusCode(200);
+            return StatusCode(200,new { title = "Applicaton added successfully.", status = 200 });
 
         }
 
         
         [HttpDelete("{appId}")]
         public ActionResult<AppConsoleApi.Models.Application> DeleteApplication(int appId)
-        {
-            var application =  context.Application.FirstOrDefault(e=> e.AppId == appId);
-            if(application == null)
+        {         
+            if(!ApplicationExists(appId))
             {
                 return NotFound();
             }
             DatabaseOperation db = new DatabaseOperation();
             db.deleteApplication(appId);
 
-            return application;
-
+            return StatusCode(200,new { title = "Applicaton deleted successfully.", status = 200 });
         }
 
 
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutApplication(int id, Application application)
-        // {
-
-        // }
-
-
-        // private bool ApplicationExists(int id)
-        // {
-        //     return context.Application.Any(e => e.AppId == id);
-        // }
+        private bool ApplicationExists(int id)
+        {
+            return context.Application.Any(e => e.AppId == id);
+        }
     }
 }
