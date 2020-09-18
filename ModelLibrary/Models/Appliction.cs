@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using Microsoft.AspNetCore.Http;
 
 namespace ModelLibrary
 {
@@ -26,5 +27,13 @@ namespace ModelLibrary
         public DateTime UploadedDate {get; set;}
 
 
+    }
+
+    public class ApplicationFile
+    {
+        public IFormFile files
+        {get; set;}
+
+        
     }
 }

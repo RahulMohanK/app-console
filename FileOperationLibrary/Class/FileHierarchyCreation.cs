@@ -1,5 +1,7 @@
 using System;
 using System.Xml;
+using ModelLibrary;
+using System.IO;
 namespace FileOperationLibrary
 {
     public class FileHierarchyCreation
@@ -18,7 +20,7 @@ namespace FileOperationLibrary
             }
         }
 
-        public void CreateApplicationFolder(int appId, string categoryName, string projectName, string fileName,string bundleIdentifier)
+        public bool CreateApplicationFolder(int appId, string categoryName, string projectName, string fileName,string bundleIdentifier,ModelLibrary.ApplicationFile appFile)
         {
 
 
@@ -28,13 +30,46 @@ namespace FileOperationLibrary
             if (FileExists(applicationPath) == false)
             {
                 System.IO.Directory.CreateDirectory(applicationPath);
+                if(UploadApplicationFile(applicationPath,appFile))
+                {
                 FileOperationLibrary.ManifestPlist manifest = new FileOperationLibrary.ManifestPlist();
                 manifest.CreateManifest(applicationPath, applicationPath + "/" + fileName, bundleIdentifier, Convert.ToString(appId), projectName);
+                }
+                else
+                {
+                    Console.WriteLine("file upload error");
+                    return false;
+                }
+                return true;
+
 
             }
+            return false;
 
         }
 
+        public bool UploadApplicationFile(string route,ModelLibrary.ApplicationFile appFile)
+        {
+        
+            if(appFile.files.Length >0)
+            {
+                try{
+
+                    using(FileStream filestream = System.IO.File.Create(route+"/"+appFile.files.FileName))
+                    {
+                        appFile.files.CopyTo(filestream);
+                        filestream.Flush();
+                        return true;
+                       
+                    }
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine("Upload Application File catch"+e);
+                }
+            }
+            return false;
+        }
 
         public void CreateCategoryFolder(string projectName, string categoryName)
         {

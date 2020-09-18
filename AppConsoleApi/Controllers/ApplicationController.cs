@@ -9,6 +9,10 @@ using  AppConsoleApi.Models;
 using DatabaseOperationLibrary;
 using FileOperationLibrary;
 using model = ModelLibrary;
+using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 
 namespace AppConsoleApi.Controllers
 {
@@ -46,8 +50,10 @@ namespace AppConsoleApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<object> PostApplication(ModelLibrary.Application app)
+        public ActionResult<object> PostApplication([FromForm] ModelLibrary.ApplicationFile appFile,[FromForm]ModelLibrary.Application app)
         {
+            Console.WriteLine("file : "+appFile.files.Length.ToString());
+            Console.WriteLine("application : "+app.AppId.ToString());
            
             DatabaseOperation db = new DatabaseOperation();
             db.AddApplication(app.ProjectName, app.CategoryName, app.FileName);
@@ -59,13 +65,20 @@ namespace AppConsoleApi.Controllers
             var project =  context.Project.FirstOrDefault(e => e.ProjectName == app.ProjectName);
 
             FileHierarchyCreation file = new FileHierarchyCreation();
-            file.CreateApplicationFolder(application.AppId, app.CategoryName, app.ProjectName,app.FileName,project.BundleIdentifier);
+            bool uploadCheck = file.CreateApplicationFolder(application.AppId, app.CategoryName, app.ProjectName,app.FileName,project.BundleIdentifier,appFile);
+            
+            if(uploadCheck)
+            {
+            return StatusCode(200,new { title = "Applicaton uploaded successfully.", status = 200});
+            }
+            else
+            {
+                return StatusCode(500,new { title = "Applicaton upload error.", status = 500,message = "This app version already exists"});
+            }
 
-            return StatusCode(200,new { title = "Applicaton added successfully.", status = 200 });
-
-        }
-
+        }     
         
+         
         [HttpDelete("{appId}")]
         public ActionResult<AppConsoleApi.Models.Application> DeleteApplication(int appId)
         {         
