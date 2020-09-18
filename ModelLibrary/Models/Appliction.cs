@@ -20,7 +20,7 @@ namespace ModelLibrary
 
         [Required(ErrorMessage = "FileName must not be null")]
         [DataType(DataType.Text)]
-        [RegularExpression("^[a-zA-Z._- ]+$", ErrorMessage = "FileName not allowed. Filename can contain((a-z),(A-Z),(.),(_),(-))")]
+        [RegularExpression("^[a-zA-Z. ]+$", ErrorMessage = "FileName not allowed. Filename can contain((a-z),(A-Z),(.),(_),(-))")]
         public string FileName { get; set; }
 
         public DateTime UploadedDate {get; set;}

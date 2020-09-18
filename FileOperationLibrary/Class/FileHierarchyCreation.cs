@@ -18,7 +18,7 @@ namespace FileOperationLibrary
             }
         }
 
-        public void CreateApplicationFolder(int appId, string categoryName, string projectName, string fileName)
+        public void CreateApplicationFolder(int appId, string categoryName, string projectName, string fileName,string bundleIdentifier)
         {
 
 
@@ -29,7 +29,7 @@ namespace FileOperationLibrary
             {
                 System.IO.Directory.CreateDirectory(applicationPath);
                 FileOperationLibrary.ManifestPlist manifest = new FileOperationLibrary.ManifestPlist();
-                manifest.CreateManifest(applicationPath, applicationPath + "/" + fileName, "com.jhd", Convert.ToString(appId), projectName);
+                manifest.CreateManifest(applicationPath, applicationPath + "/" + fileName, bundleIdentifier, Convert.ToString(appId), projectName);
 
             }
 

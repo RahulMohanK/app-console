@@ -52,12 +52,14 @@ namespace AppConsoleApi.Controllers
             DatabaseOperation db = new DatabaseOperation();
             db.AddApplication(app.ProjectName, app.CategoryName, app.FileName);
 
-             ModelLibrary.Application application = new ModelLibrary.Application();
+            ModelLibrary.Application application = new ModelLibrary.Application();
             DatabaseOperation db1 = new DatabaseOperation();
             application = db1.getSingleApplication(app.ProjectName, app.CategoryName, app.FileName);
 
+            var project =  context.Project.FirstOrDefault(e => e.ProjectName == app.ProjectName);
+
             FileHierarchyCreation file = new FileHierarchyCreation();
-            file.CreateApplicationFolder(application.AppId, app.CategoryName, app.ProjectName,app.FileName);
+            file.CreateApplicationFolder(application.AppId, app.CategoryName, app.ProjectName,app.FileName,project.BundleIdentifier);
 
             return StatusCode(200,new { title = "Applicaton added successfully.", status = 200 });
 

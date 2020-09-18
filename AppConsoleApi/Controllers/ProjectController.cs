@@ -49,11 +49,17 @@ namespace AppConsoleApi.Controllers
         [HttpPost]
         public ActionResult<object> PostProject(ModelLibrary.Project project)
         {
+            try{
             DatabaseOperation db = new DatabaseOperation();
             db.AddProject(project.ProjectName, project.BundleIdentifier);
 
             FileHierarchyCreation file = new FileHierarchyCreation();
             file.CreateProjectFolder(project.ProjectName);
+            }
+            catch(System.Data.SqlClient.SqlException)
+            {
+                return StatusCode(500,new { title = "Project addition error", status = 500, message="Cannot have duplicate project name" });
+            }
 
             return StatusCode(200,new { title = "Project added successfully.", status = 200 });
 

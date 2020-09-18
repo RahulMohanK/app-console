@@ -44,10 +44,17 @@ namespace AppConsoleApi.Controllers
         [HttpPost]
         [ActionName("addCategory")]
         public ActionResult<object> PostCategory(ModelLibrary.Category category)
-        {
+        {   
+            try{
             DatabaseOperation db = new DatabaseOperation();
             db.AddCategory(category.CategoryName);
-            return StatusCode(200, new{ title = "Category added successfully.", status = 200 });
+           
+            }
+            catch(System.Data.SqlClient.SqlException)
+            {
+                return StatusCode(500,new{ title = "Category addition error", status = 500, message="Cannot have duplicate category" });
+            }
+             return StatusCode(200, new{ title = "Category added successfully.", status = 200 });
         }
 
         [HttpDelete("{categoryName}")]
