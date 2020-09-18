@@ -26,9 +26,10 @@ namespace AppConsoleApi.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppConsoleApi.Models.Project>>> GetProject()
+        public  ActionResult<IEnumerable<ModelLibrary.Project>> GetProject()
         {
-            return await context.Project.ToListAsync();
+            DatabaseOperation db = new DatabaseOperation();
+            return  db.getProjects();
         }
 
 
@@ -58,20 +59,36 @@ namespace AppConsoleApi.Controllers
 
         }
 
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutProject(int id, Project project)
-        // {
+        [HttpDelete("{projectName}")]
+        public  ActionResult<AppConsoleApi.Models.Project> DeleteProject(string projectName)
+        {
+            var project = context.Project.FirstOrDefault(e => e.ProjectName == projectName);
+            if(project == null)
+            {
+                return NotFound();
+            }
+            DatabaseOperation db = new DatabaseOperation();
+            db.deleteProject(projectName);
+            return project;
+        }
 
-        // }
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult<Project>> DeleteProject(int id)
-        // {
 
-        // }
+        [HttpPut("{oldProjectName}")]
+        public ActionResult<ModelLibrary.Project> PutProject(string oldProjectName, ModelLibrary.Project project)
+        {
+            if(!ProjectExists(oldProjectName))
+            {
+                return NotFound();
+            }
+            DatabaseOperation db = new DatabaseOperation();
+            db.UpdateProject(oldProjectName,project.ProjectName,project.BundleIdentifier);
 
-        // private bool ProjectExists(int id)
-        // {
-        //     return context.Project.Any(e => e.Id == id);
-        // }
+            return StatusCode(200);
+        }
+     
+        private bool ProjectExists(string projectName)
+        {
+            return context.Project.Any(e => e.ProjectName == projectName);
+        }
     }
 }

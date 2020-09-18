@@ -3,7 +3,7 @@ using System.Xml;
 
 namespace FileOperationLibrary
 {
-    public class ManifestXml
+    public class ManifestPlist
     {
         public void CreateManifest(string plistPath, string ipaPath, string bundleIdentifier, string bundleVersion, string projectName)
         {
@@ -38,7 +38,7 @@ namespace FileOperationLibrary
                 writer.WriteElementString("key", "kind");
                 writer.WriteElementString("string", "software");
                 writer.WriteElementString("key", "title");
-                writer.WriteElementString("string", projectName);   
+                writer.WriteElementString("string", projectName);
                 writer.WriteEndElement();
                 writer.WriteEndElement();
                 writer.WriteEndElement();

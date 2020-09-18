@@ -25,9 +25,10 @@ namespace AppConsoleApi.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppConsoleApi.Models.Application>>> GetApplication()
-        {
-            return await context.Application.ToListAsync();
+        public  ActionResult<List<ModelLibrary.Application>> GetApplication(string projectName, string categoryName)
+        {      
+            DatabaseOperation db = new DatabaseOperation();
+            return db.getApplications(projectName,categoryName);
         }
 
 
@@ -47,17 +48,34 @@ namespace AppConsoleApi.Controllers
         [HttpPost]
         public ActionResult<object> PostApplication(ModelLibrary.Application app)
         {
-            ModelLibrary.Application application = new ModelLibrary.Application();
+           
             DatabaseOperation db = new DatabaseOperation();
-            DatabaseOperation db1 = new DatabaseOperation();
-
             db.AddApplication(app.ProjectName, app.CategoryName, app.FileName);
+
+             ModelLibrary.Application application = new ModelLibrary.Application();
+            DatabaseOperation db1 = new DatabaseOperation();
             application = db1.getSingleApplication(app.ProjectName, app.CategoryName, app.FileName);
 
             FileHierarchyCreation file = new FileHierarchyCreation();
             file.CreateApplicationFolder(application.AppId, app.CategoryName, app.ProjectName,app.FileName);
 
             return StatusCode(200);
+
+        }
+
+        
+        [HttpDelete("{appId}")]
+        public ActionResult<AppConsoleApi.Models.Application> DeleteApplication(int appId)
+        {
+            var application =  context.Application.FirstOrDefault(e=> e.AppId == appId);
+            if(application == null)
+            {
+                return NotFound();
+            }
+            DatabaseOperation db = new DatabaseOperation();
+            db.deleteApplication(appId);
+
+            return application;
 
         }
 
@@ -68,11 +86,6 @@ namespace AppConsoleApi.Controllers
 
         // }
 
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult<Application>> DeleteApplication(int id)
-        // {
-
-        // }
 
         // private bool ApplicationExists(int id)
         // {

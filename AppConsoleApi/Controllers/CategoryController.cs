@@ -12,7 +12,7 @@ using ModelLibrary;
 
 namespace AppConsoleApi.Controllers
 {
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -25,26 +25,24 @@ namespace AppConsoleApi.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppConsoleApi.Models.Category>>> GetCategory()
+        [ActionName("getCategory")]
+        public  ActionResult<IEnumerable<ModelLibrary.Category>> GetCategory()
         {
-            return await context.Category.ToListAsync();
+            DatabaseOperation db = new DatabaseOperation();
+            return db.getCategories();
         }
 
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AppConsoleApi.Models.Category>> GetCategory(int id)
+        [HttpGet]
+         [ActionName("getSpecificCategory")]
+        public ActionResult<IEnumerable<ModelLibrary.Category>> GetProjectSpecificCategory(string projectName)
         {
-            var category = await context.Category.FindAsync(id);
-
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return category;
+            DatabaseOperation db = new DatabaseOperation();
+            return db.getProjectSpecificCategory(projectName);
         }
 
         [HttpPost]
+        [ActionName("addCategory")]
         public ActionResult<object> PostCategory(ModelLibrary.Category category)
         {
             DatabaseOperation db = new DatabaseOperation();
@@ -52,25 +50,39 @@ namespace AppConsoleApi.Controllers
             return StatusCode(200);
         }
 
+        [HttpDelete("{categoryName}")]
+        [ActionName("deleteCategory")]
+        public ActionResult<AppConsoleApi.Models.Category> DeleteCategory(string categoryName)
+        {
+            var category = context.Category.FirstOrDefault(e=> e.CategoryName == categoryName);
+            if(category == null)
+            {
+                return NotFound();
+            }
+            DatabaseOperation db = new DatabaseOperation();
+            db.deleteCategory(categoryName);
+            return category;
+        }
 
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> PutCategory(int id, Category category)
-        // {
-
-        // }
 
 
+        [HttpPut("{oldCategoryName}")]
+        [ActionName("updateCategory")]
+        public ActionResult<ModelLibrary.Category> PutCategory(string oldCategoryName, ModelLibrary.Category category)
+        {
+            if(!CategoryExists(oldCategoryName))
+            {
+                return NotFound();
+            }
+            DatabaseOperation db = new DatabaseOperation();
+            db.UpdateCategory(oldCategoryName,category.CategoryName);
 
-
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult<Category>> DeleteCategory(int id)
-        // {
-
-        // }
-
-        // private bool CategoryExists(int id)
-        // {
-        //     return context.Category.Any(e => e.Id == id);
-        // }
+            return StatusCode(200);
+        }
+ 
+        private bool CategoryExists(string categoryName)
+        {
+            return context.Category.Any(e => e.CategoryName == categoryName);
+        }
     }
 }

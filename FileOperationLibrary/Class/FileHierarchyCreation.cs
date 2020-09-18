@@ -28,7 +28,7 @@ namespace FileOperationLibrary
             if (FileExists(applicationPath) == false)
             {
                 System.IO.Directory.CreateDirectory(applicationPath);
-                FileOperationLibrary.ManifestXml manifest = new FileOperationLibrary.ManifestXml();
+                FileOperationLibrary.ManifestPlist manifest = new FileOperationLibrary.ManifestPlist();
                 manifest.CreateManifest(applicationPath, applicationPath + "/" + fileName, "com.jhd", Convert.ToString(appId), projectName);
 
             }
