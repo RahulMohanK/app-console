@@ -47,7 +47,7 @@ namespace AppConsoleApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<object> PostProject(ModelLibrary.Project project)
+        public ActionResult<ModelLibrary.Project> PostProject(ModelLibrary.Project project)
         {
             try{
             DatabaseOperation db = new DatabaseOperation();

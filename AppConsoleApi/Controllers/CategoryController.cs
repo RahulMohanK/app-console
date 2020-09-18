@@ -43,7 +43,7 @@ namespace AppConsoleApi.Controllers
 
         [HttpPost]
         [ActionName("addCategory")]
-        public ActionResult<object> PostCategory(ModelLibrary.Category category)
+        public ActionResult<ModelLibrary.Category> PostCategory(ModelLibrary.Category category)
         {   
             try{
             DatabaseOperation db = new DatabaseOperation();

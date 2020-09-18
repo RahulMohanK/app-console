@@ -50,11 +50,8 @@ namespace AppConsoleApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<object> PostApplication([FromForm] ModelLibrary.ApplicationFile appFile,[FromForm]ModelLibrary.Application app)
-        {
-            Console.WriteLine("file : "+appFile.files.Length.ToString());
-            Console.WriteLine("application : "+app.AppId.ToString());
-           
+        public ActionResult<ModelLibrary.Application> PostApplication([FromForm] ModelLibrary.ApplicationFile appFile,[FromForm]ModelLibrary.Application app)
+        {   
             DatabaseOperation db = new DatabaseOperation();
             db.AddApplication(app.ProjectName, app.CategoryName, app.FileName);
 

@@ -49,8 +49,7 @@ namespace FileOperationLibrary
         }
 
         public bool UploadApplicationFile(string route,ModelLibrary.ApplicationFile appFile)
-        {
-        
+        {       
             if(appFile.files.Length >0)
             {
                 try{
