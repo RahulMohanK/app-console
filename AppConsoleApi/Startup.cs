@@ -46,6 +46,8 @@ namespace AppConsoleApi
 
             app.UseAuthorization();
 
+            app.UseCors(options => options.WithOrigins("*","*","*"));
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
