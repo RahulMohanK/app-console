@@ -79,6 +79,156 @@ namespace FileOperationLibrary
             }
         }
 
+
+        public void EditProjectFolder(string oldProjectName, string newProjectName, string bundleIdentifier)
+        {
+            string[] dirs = System.IO.Directory.GetDirectories(rootPath);
+            char[] spearator = { '\\'}; 
+            try{
+            foreach(var dir in dirs)
+            {
+              
+              if(dir.Split(spearator)[1] == oldProjectName)
+              {
+                Console.WriteLine("Edited :"+ dir.Split(spearator)[1]);
+                System.IO.Directory.Move(rootPath+"/"+oldProjectName,rootPath+"/"+newProjectName);
+                break;
+              }
+                              
+            }
+            }
+            catch(Exception)
+            {
+                Console.WriteLine("old and new project names are same");
+            }
+            string[] categoryDirs = System.IO.Directory.GetDirectories(rootPath+"/"+newProjectName);
+            foreach(var category in categoryDirs)
+            {   
+                
+                string[] appDirs = System.IO.Directory.GetDirectories(category);
+                foreach(var app in appDirs)
+                {
+                    //Console.WriteLine(app);
+                    string[] appFile = Directory.GetFiles(app,"*.ipa");
+                    if(appFile.Length == 1)
+                    {
+                        string[] details = appFile[0].Split(spearator);
+                        File.Delete(app+"/manifest.plist"); 
+                        FileOperationLibrary.ManifestPlist manifest = new FileOperationLibrary.ManifestPlist();
+                        manifest.CreateManifest(app.Replace('\\','/'), appFile[0].Replace('\\','/'), bundleIdentifier, Convert.ToString(details[3]), newProjectName);
+                       // Console.WriteLine(appFile[0]);
+                    }
+                   
+                 
+                }
+            }
+        }
+
+
+
+        public void EditCategoryFolder(string oldCategoryName, string newCategoryName)
+        {
+            string[] dirs = System.IO.Directory.GetDirectories(rootPath);
+            char[] separator = { '\\'}; 
+            foreach(var dir in dirs)
+            {
+                string[] categoryDirs = System.IO.Directory.GetDirectories(dir);
+                foreach(var category in categoryDirs)
+                {
+                    if(category.Split(separator)[2] == oldCategoryName)
+                    {
+                        Console.WriteLine(category);
+                        Console.WriteLine(dir+"/"+newCategoryName);
+                        Directory.Move(category,dir+"/dummy");
+                        Directory.Move(dir+"/dummy",dir+"/"+newCategoryName);
+                        string[] appDirs = Directory.GetDirectories(category);
+                        foreach(var app in appDirs)
+                        {
+                            
+                             string[] appFile = Directory.GetFiles(app,"*.ipa");
+                             if(appFile.Length == 1)
+                             {
+                                string[] details = appFile[0].Split(separator);
+                                Console.WriteLine(details[0]+" "+details[1]+" "+details[2]+" "+details[3]+" "+details[4]);
+                             }
+                         
+                        }
+                    }
+                }
+            }
+
+        }
+
+        public void DeleteProjectFolder(string projectName)
+        {
+            string[] dirs = System.IO.Directory.GetDirectories(rootPath);
+            char[] spearator = { '\\'}; 
+            foreach(var dir in dirs)
+            {
+              
+              if(dir.Split(spearator)[1] == projectName)
+              {
+                //Console.WriteLine("Deleted project "+ dir.Split(spearator)[1]);
+                System.IO.Directory.Delete(rootPath+"/"+projectName,true);   
+              }
+                              
+            }
+        }
+
+        public void DeleteCategoryFolder(string categoryName)
+        {
+            string[] dirs = System.IO.Directory.GetDirectories(rootPath);
+            char[] separator = { '\\'}; 
+            foreach(var dir in dirs)
+            {
+                string[] categoryDirs = System.IO.Directory.GetDirectories(dir);
+                foreach(var category in categoryDirs)
+                {
+                    if(category.Split(separator)[2] == categoryName)
+                    {
+                        //Console.WriteLine(category);
+                        Directory.Delete(category,true);
+                               
+                    }
+                }
+            }
+        }
+
+        public void DeleteApplicationFolder(int appId)
+        {
+             string[] dirs = System.IO.Directory.GetDirectories(rootPath);
+            char[] separator = { '\\'}; 
+            foreach(var dir in dirs)
+            {
+                string[] categoryDirs = System.IO.Directory.GetDirectories(dir);
+                foreach(var category in categoryDirs)
+                {
+                  
+                       
+                        string[] appDirs = Directory.GetDirectories(category);
+                        
+                             foreach(var app in appDirs)
+                            {
+                            //Console.WriteLine(app);
+                             string[] details = app.Split(separator);
+
+                                if(int.Parse(details[3]) == appId)
+                                {
+                                //Console.WriteLine(details[0]+" "+details[1]+" "+details[2]+" "+details[3]);
+                                Directory.Delete(app,true);
+                             }
+                        appDirs = Directory.GetDirectories(category);
+                        if(appDirs.Length == 0)
+                        {
+                            Directory.Delete(category,true);
+                        }
+                              
+                    }
+                }
+            }
+
+        }
+
         public bool FileExists(string path)
         {
             if (System.IO.Directory.Exists(path))

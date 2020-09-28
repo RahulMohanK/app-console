@@ -85,7 +85,8 @@ namespace AppConsoleApi.Controllers
             }
             DatabaseOperation db = new DatabaseOperation();
             db.deleteApplication(appId);
-
+            FileHierarchyCreation file = new FileHierarchyCreation();
+            file.DeleteApplicationFolder(appId);
             return StatusCode(200,new { title = "Applicaton deleted successfully.", status = 200 });
         }
 

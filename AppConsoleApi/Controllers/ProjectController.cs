@@ -75,6 +75,8 @@ namespace AppConsoleApi.Controllers
             }
             DatabaseOperation db = new DatabaseOperation();
             db.deleteProject(projectName);
+            FileHierarchyCreation file = new FileHierarchyCreation();
+            file.DeleteProjectFolder(projectName);
             return StatusCode(200,new { title = "Deletion successfull.", status = 200 });
         }
 
@@ -88,13 +90,20 @@ namespace AppConsoleApi.Controllers
             }
             DatabaseOperation db = new DatabaseOperation();
             db.UpdateProject(oldProjectName,project.ProjectName,project.BundleIdentifier);
+            FileHierarchyCreation file = new FileHierarchyCreation();
+            file.EditProjectFolder(oldProjectName,project.ProjectName,project.BundleIdentifier);
 
             return StatusCode(200, new{ title = "Project updated successfully.", status = 200 });
         }
      
         private bool ProjectExists(string projectName)
         {
-            return context.Project.Any(e => e.ProjectName == projectName);
+           DatabaseOperation db = new DatabaseOperation();
+            if(db.getSingleProject(projectName).Count == 0)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

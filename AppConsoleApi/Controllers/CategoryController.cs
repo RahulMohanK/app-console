@@ -68,6 +68,8 @@ namespace AppConsoleApi.Controllers
             }
             DatabaseOperation db = new DatabaseOperation();
             db.deleteCategory(categoryName);
+            FileHierarchyCreation file = new FileHierarchyCreation();
+            file.DeleteCategoryFolder(categoryName);
             return StatusCode(200,new { title = "Applicaton deleted successfully.", status = 200 });
         }
 
@@ -83,13 +85,20 @@ namespace AppConsoleApi.Controllers
             }
             DatabaseOperation db = new DatabaseOperation();
             db.UpdateCategory(oldCategoryName,category.CategoryName);
-
+            FileHierarchyCreation file = new FileHierarchyCreation();
+            file.EditCategoryFolder(oldCategoryName,category.CategoryName);
             return StatusCode(200, new{ title = "Category updated successfully.", status = 200 });
         }
  
         private bool CategoryExists(string categoryName)
         {
-            return context.Category.Any(e => e.CategoryName == categoryName);
+            DatabaseOperation db = new DatabaseOperation();
+            if(db.getSingleCategory(categoryName).Count == 0)
+            {
+                return false;
+            }
+            return true;
+            
         }
     }
 }

@@ -173,6 +173,62 @@ namespace DatabaseOperationLibrary
             return app;
         }
 
+        public List<ModelLibrary.Category> getSingleCategory(string categoryName)
+        {
+             List<ModelLibrary.Category> categoryList = new List<ModelLibrary.Category>();
+            SqlCommand sqlCommand;
+            SqlDataReader sqlDataReader;
+            sqlCommand = new SqlCommand("Proc_Console_getSingleCategory", connection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@Category_Name",SqlDbType.NVarChar).Value = categoryName;
+            sqlDataReader = sqlCommand.ExecuteReader();
+
+            if (sqlDataReader.HasRows)
+            {
+                while (sqlDataReader.Read())
+                {
+                    ModelLibrary.Category category = new ModelLibrary.Category();
+                    category.Id = (int)sqlDataReader.GetValue(0);
+                    category.CategoryName = sqlDataReader.GetValue(1).ToString();
+                    categoryList.Add(category);
+                   
+                }
+            }
+            sqlDataReader.Close();
+            sqlCommand.Dispose();
+            connection.Close();
+            return categoryList;
+        }
+         public List<ModelLibrary.Project> getSingleProject(string projectName)
+        {
+             List<ModelLibrary.Project> projectList = new List<ModelLibrary.Project>();
+            SqlCommand sqlCommand;
+            SqlDataReader sqlDataReader;
+            sqlCommand = new SqlCommand("Proc_Console_getSingleProject", connection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            
+            sqlCommand.Parameters.AddWithValue("@Project_Name",SqlDbType.NVarChar).Value = projectName;
+            sqlDataReader = sqlCommand.ExecuteReader();
+
+            if (sqlDataReader.HasRows)
+            {
+                while (sqlDataReader.Read())
+                {
+                   ModelLibrary.Project project = new ModelLibrary.Project();
+                    project.Id = (int)sqlDataReader.GetValue(0);
+                    project.ProjectName = sqlDataReader.GetValue(1).ToString();
+                    project.BundleIdentifier = sqlDataReader.GetValue(2).ToString();
+                    projectList.Add(project);
+                }
+            }
+
+            sqlDataReader.Close();
+            sqlCommand.Dispose();
+            connection.Close();
+
+            return projectList;
+        }
+
         public List<Application> getApplications(string projectName,string categoryName)
         {
             List<Application> appList = new List<Application>();
