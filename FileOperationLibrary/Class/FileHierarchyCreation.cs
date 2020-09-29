@@ -33,7 +33,7 @@ namespace FileOperationLibrary
                 if(UploadApplicationFile(applicationPath,appFile))
                 {
                 FileOperationLibrary.ManifestPlist manifest = new FileOperationLibrary.ManifestPlist();
-                manifest.CreateManifest(applicationPath, applicationPath + "/" + fileName, bundleIdentifier, Convert.ToString(appId), projectName);
+                manifest.CreateManifest(applicationPath, applicationPath + "/" + appFile.files.FileName, bundleIdentifier, Convert.ToString(appId), projectName);
                 }
                 else
                 {
@@ -60,7 +60,11 @@ namespace FileOperationLibrary
                         filestream.Flush();
                         return true;
                        
-                    }
+                       
+                    } 
+                   
+                  
+                   
                 }
                 catch(Exception e)
                 {
@@ -190,6 +194,29 @@ namespace FileOperationLibrary
                         Directory.Delete(category,true);
                                
                     }
+                }
+            }
+        }
+
+        public void DeleteSpecificCategoryFolder(string projectName,string categoryName)
+        {
+             string[] dirs = System.IO.Directory.GetDirectories(rootPath);
+            char[] separator = { '\\'}; 
+            foreach(var dir in dirs)
+            {
+                if(dir.Split(separator)[1] == projectName)
+                {
+                string[] categoryDirs = System.IO.Directory.GetDirectories(dir);
+                foreach(var category in categoryDirs)
+                {
+                    if(category.Split(separator)[2] == categoryName)
+                    {
+                        //Console.WriteLine(category);
+                        Directory.Delete(category,true);
+                        break;   
+                    }
+                }
+                break;
                 }
             }
         }

@@ -73,6 +73,21 @@ namespace AppConsoleApi.Controllers
             return StatusCode(200,new { title = "Applicaton deleted successfully.", status = 200 });
         }
 
+        [HttpDelete("{projectName}/{categoryName}")]
+        [ActionName("deleteSpecificCategory")]
+        public ActionResult<AppConsoleApi.Models.Category> DeleteCategory(string projectName,string categoryName)
+        {   
+           
+            if(!projectSpecificCategoryExists(projectName,categoryName))
+            {
+                return NotFound();
+            }
+            DatabaseOperation db = new DatabaseOperation();
+            db.deleteProjectSpecificCategory(projectName,categoryName);
+            FileHierarchyCreation file = new FileHierarchyCreation();
+            file.DeleteSpecificCategoryFolder(projectName,categoryName);
+            return StatusCode(200,new { title = "Applicaton deleted successfully.", status = 200 });
+        }
 
 
         [HttpPut("{oldCategoryName}")]
@@ -99,6 +114,23 @@ namespace AppConsoleApi.Controllers
             }
             return true;
             
+        }
+    
+        private bool projectSpecificCategoryExists(string projectName,string categoryName)
+        {
+             DatabaseOperation db = new DatabaseOperation();
+             List<ModelLibrary.Category> categoryList = new List<ModelLibrary.Category>();
+             categoryList = db.getProjectSpecificCategory(projectName);
+            foreach(var val in categoryList)
+            {
+                if(val.CategoryName == categoryName)
+                {
+                   
+                    return true;
+                }
+            }
+               
+            return false;
         }
     }
 }

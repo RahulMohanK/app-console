@@ -52,17 +52,20 @@ namespace AppConsoleApi.Controllers
         [HttpPost]
         public ActionResult<ModelLibrary.Application> PostApplication([FromForm] ModelLibrary.ApplicationFile appFile,[FromForm]ModelLibrary.Application app)
         {   
+            //appending date with filename to make dbo.Application.File_Name unique
+
+            string tempFileName = DateTime.Now.ToString("dddd, dd MMMM yyyy HH:mm:ss")+"/"+app.FileName;
             DatabaseOperation db = new DatabaseOperation();
-            db.AddApplication(app.ProjectName, app.CategoryName, app.FileName);
+            db.AddApplication(app.ProjectName, app.CategoryName, tempFileName);
 
             ModelLibrary.Application application = new ModelLibrary.Application();
             DatabaseOperation db1 = new DatabaseOperation();
-            application = db1.getSingleApplication(app.ProjectName, app.CategoryName, app.FileName);
+            application = db1.getSingleApplication(app.ProjectName, app.CategoryName, tempFileName);
 
             var project =  context.Project.FirstOrDefault(e => e.ProjectName == app.ProjectName);
 
             FileHierarchyCreation file = new FileHierarchyCreation();
-            bool uploadCheck = file.CreateApplicationFolder(application.AppId, app.CategoryName, app.ProjectName,app.FileName,project.BundleIdentifier,appFile);
+            bool uploadCheck = file.CreateApplicationFolder(application.AppId, app.CategoryName, app.ProjectName,tempFileName,project.BundleIdentifier,appFile);
             
             if(uploadCheck)
             {

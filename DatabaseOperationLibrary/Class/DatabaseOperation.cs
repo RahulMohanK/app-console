@@ -246,7 +246,7 @@ namespace DatabaseOperationLibrary
                 {
                     Application app = new Application();
                     app.AppId = (int)sqlDataReader.GetValue(0);
-                    Console.WriteLine("get Application" + Convert.ToString(app.AppId));
+                   // Console.WriteLine("get Application" + Convert.ToString(app.AppId));
                     app.ProjectName = sqlDataReader.GetValue(1).ToString();
                     app.CategoryName = sqlDataReader.GetValue(2).ToString();
                     app.FileName = sqlDataReader.GetValue(3).ToString();
@@ -287,6 +287,25 @@ namespace DatabaseOperationLibrary
                 SqlDataAdapter adapter = new SqlDataAdapter();
                 sqlCommand = new SqlCommand("Proc_Console_deleteCategory", connection);
                 sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@Category_Name", SqlDbType.NVarChar).Value = categoryName;
+                sqlCommand.ExecuteNonQuery();
+                sqlCommand.Dispose();
+                connection.Close();
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine("/n category deletion error"+e);
+            }
+        }
+
+        public void deleteProjectSpecificCategory(string projectName,string categoryName)
+        {
+             try{
+                SqlCommand sqlCommand;
+                SqlDataAdapter adapter = new SqlDataAdapter();
+                sqlCommand = new SqlCommand("Proc_Console_deleteProjectSpecificCategory", connection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@Project_Name", SqlDbType.NVarChar).Value = projectName;
                 sqlCommand.Parameters.AddWithValue("@Category_Name", SqlDbType.NVarChar).Value = categoryName;
                 sqlCommand.ExecuteNonQuery();
                 sqlCommand.Dispose();
