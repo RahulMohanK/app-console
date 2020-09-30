@@ -5,6 +5,10 @@ using System.IO;
 using System.Configuration;
 using System.Collections.Generic;
 using ModelLibrary;
+using System.Collections.Specialized;
+
+
+
 namespace DatabaseOperationLibrary
 {
     public class DatabaseOperation
@@ -14,8 +18,7 @@ namespace DatabaseOperationLibrary
 
         public DatabaseOperation()
         {
-            connectionString = "Server=DESKTOP-ROBHQ7Q;Database=Console Database;Trusted_Connection=True";
-
+            connectionString = ConfigurationManager.AppSettings["connectionstring"];
             connection = new SqlConnection(connectionString);
             connection.Open();
         }
@@ -277,7 +280,6 @@ namespace DatabaseOperationLibrary
                 {
                     Application app = new Application();
                     app.AppId = (int)sqlDataReader.GetValue(0);
-                   // Console.WriteLine("get Application" + Convert.ToString(app.AppId));
                     app.ProjectName = sqlDataReader.GetValue(1).ToString();
                     app.CategoryName = sqlDataReader.GetValue(2).ToString();
                     app.FileName = sqlDataReader.GetValue(3).ToString();
@@ -295,7 +297,7 @@ namespace DatabaseOperationLibrary
 
         public void DeleteProject(string projectName)
         {
-            try{
+            
                 SqlCommand sqlCommand;
                 SqlDataAdapter adapter = new SqlDataAdapter();
                 sqlCommand = new SqlCommand("Proc_Console_deleteProject", connection);
@@ -304,11 +306,7 @@ namespace DatabaseOperationLibrary
                 sqlCommand.ExecuteNonQuery();
                 sqlCommand.Dispose();
                 connection.Close();
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine("/nproject deletion error"+e);
-            }
+          
 
         }
         public void DeleteCategory(string categoryName)

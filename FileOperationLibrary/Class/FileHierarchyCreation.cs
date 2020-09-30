@@ -2,6 +2,8 @@ using System;
 using System.Xml;
 using ModelLibrary;
 using System.IO;
+using System.Configuration;
+using System.Collections.Specialized;
 namespace FileOperationLibrary
 {
     public class FileHierarchyCreation
@@ -9,7 +11,7 @@ namespace FileOperationLibrary
         string rootPath;
         public FileHierarchyCreation()
         {
-            rootPath = @"C:/Users/Workstation/Desktop/AppConsole/Main";
+            rootPath = ConfigurationManager.AppSettings["filerootpath"]; 
         }
         public void CreateProjectFolder(string fileName)
         {

@@ -16,10 +16,9 @@ namespace AppConsoleApi.Controllers
     public class CategoryController : ControllerBase
     {
         
-
         [HttpGet]
         [ActionName("getCategory")]
-        public  ActionResult<IEnumerable<ModelLibrary.Category>> GetCategory()
+        public  ActionResult<IEnumerable<Category>> GetCategory()
         {
             DatabaseOperation db = new DatabaseOperation();
             return db.GetCategories();
@@ -28,7 +27,7 @@ namespace AppConsoleApi.Controllers
 
         [HttpGet]
          [ActionName("getSpecificCategory")]
-        public ActionResult<IEnumerable<ModelLibrary.Category>> GetProjectSpecificCategory(string projectName)
+        public ActionResult<IEnumerable<Category>> GetProjectSpecificCategory(string projectName)
         {
             DatabaseOperation db = new DatabaseOperation();
             return db.GetProjectSpecificCategory(projectName);
@@ -36,7 +35,7 @@ namespace AppConsoleApi.Controllers
 
         [HttpPost]
         [ActionName("addCategory")]
-        public ActionResult<ModelLibrary.Category> PostCategory(ModelLibrary.Category category)
+        public ActionResult<Category> PostCategory(Category category)
         {   
             try{
             DatabaseOperation db = new DatabaseOperation();
@@ -52,10 +51,13 @@ namespace AppConsoleApi.Controllers
 
         [HttpDelete("{categoryName}")]
         [ActionName("deleteCategory")]
-        public ActionResult<ModelLibrary.Category> DeleteCategory(string categoryName)
+        public ActionResult<Category> DeleteCategory(string categoryName)
         {   
-            
-            if(!CategoryExists(categoryName))
+            if(String.IsNullOrEmpty(categoryName))
+            {
+                 return StatusCode(500,new { title = "CategoryName must not be empty", status = 500 });
+            }
+            if(!categoryExists(categoryName))
             {
                 return NotFound();
             }
@@ -68,7 +70,7 @@ namespace AppConsoleApi.Controllers
 
         [HttpDelete("{projectName}/{categoryName}")]
         [ActionName("deleteSpecificCategory")]
-        public ActionResult<ModelLibrary.Category> DeleteCategory(string projectName,string categoryName)
+        public ActionResult<Category> DeleteCategory(string projectName,string categoryName)
         {   
            
             if(!projectSpecificCategoryExists(projectName,categoryName))
@@ -85,7 +87,7 @@ namespace AppConsoleApi.Controllers
 
         [HttpPut("{oldCategoryName}")]
         [ActionName("updateCategory")]
-        public ActionResult<ModelLibrary.Category> PutCategory(string oldCategoryName, ModelLibrary.Category category)
+        public ActionResult<Category> PutCategory(string oldCategoryName, Category category)
         {
             if(!categoryExists(oldCategoryName))
             {
@@ -112,17 +114,15 @@ namespace AppConsoleApi.Controllers
         private bool projectSpecificCategoryExists(string projectName,string categoryName)
         {
              DatabaseOperation db = new DatabaseOperation();
-             List<ModelLibrary.Category> categoryList = new List<ModelLibrary.Category>();
+             List<Category> categoryList = new List<Category>();
              categoryList = db.GetProjectSpecificCategory(projectName);
             foreach(var val in categoryList)
             {
                 if(val.CategoryName == categoryName)
-                {
-                   
+                {     
                     return true;
                 }
-            }
-               
+            }   
             return false;
         }
     }

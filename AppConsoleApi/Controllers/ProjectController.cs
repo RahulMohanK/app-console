@@ -18,16 +18,14 @@ namespace AppConsoleApi.Controllers
     {
 
         [HttpGet]
-        public  ActionResult<IEnumerable<ModelLibrary.Project>> GetProject()
+        public  ActionResult<IEnumerable<Project>> GetProject()
         {
             DatabaseOperation db = new DatabaseOperation();
             return db.GetProjects();
         }
-
-
-       
+     
         [HttpPost]
-        public ActionResult<ModelLibrary.Project> PostProject(ModelLibrary.Project project)
+        public ActionResult<Project> PostProject(Project project)
         {
             try{
             DatabaseOperation db = new DatabaseOperation();
@@ -46,10 +44,14 @@ namespace AppConsoleApi.Controllers
         }
 
         [HttpDelete("{projectName}")]
-        public  ActionResult<ModelLibrary.Project> DeleteProject(string projectName)
+        public  ActionResult<Project> DeleteProject(string projectName)
         {
+            if(String.IsNullOrEmpty(projectName))
+            {
+                return StatusCode(500,new { title = "ProjectName must not be empty", status = 500 });
+            }
             
-            if(!ProjectExists(projectName))
+            if(!projectExists(projectName))
             {
                 return NotFound();
             }
@@ -62,7 +64,7 @@ namespace AppConsoleApi.Controllers
 
 
         [HttpPut("{oldProjectName}")]
-        public ActionResult<ModelLibrary.Project> PutProject(string oldProjectName, ModelLibrary.Project project)
+        public ActionResult<Project> PutProject(string oldProjectName, Project project)
         {
             if(!projectExists(oldProjectName))
             {

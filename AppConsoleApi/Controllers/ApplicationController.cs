@@ -21,7 +21,7 @@ namespace AppConsoleApi.Controllers
     {
 
         [HttpGet]
-        public  ActionResult<List<ModelLibrary.Application>> GetApplication(string projectName, string categoryName)
+        public  ActionResult<List<Application>> GetApplication(string projectName, string categoryName)
         {      
             DatabaseOperation db = new DatabaseOperation();
             return db.GetApplications(projectName,categoryName);
@@ -30,7 +30,7 @@ namespace AppConsoleApi.Controllers
 
 
         [HttpPost]
-        public ActionResult<ModelLibrary.Application> PostApplication([FromForm] ModelLibrary.ApplicationFile appFile,[FromForm]ModelLibrary.Application app)
+        public ActionResult<Application> PostApplication([FromForm] ApplicationFile appFile,[FromForm]Application app)
         {   
             //appending date with filename to make dbo.Application.File_Name unique
 
@@ -38,13 +38,13 @@ namespace AppConsoleApi.Controllers
             DatabaseOperation db = new DatabaseOperation();
             db.AddApplication(app.ProjectName, app.CategoryName, tempFileName);
 
-            ModelLibrary.Application application = new ModelLibrary.Application();
+            Application application = new Application();
             DatabaseOperation db1 = new DatabaseOperation();
             application = db1.GetSingleApplication(app.ProjectName, app.CategoryName, tempFileName);
 
            
              DatabaseOperation db2 = new DatabaseOperation();
-             ModelLibrary.Project project = db2.GetSingleProject(app.ProjectName)[0];
+             Project project = db2.GetSingleProject(app.ProjectName)[0];
           
 
             FileHierarchyCreation file = new FileHierarchyCreation();
@@ -63,7 +63,7 @@ namespace AppConsoleApi.Controllers
         
          
         [HttpDelete("{appId}")]
-        public ActionResult<ModelLibrary.Application> DeleteApplication(int appId)
+        public ActionResult<Application> DeleteApplication(int appId)
         {         
             if(!applicationExists(appId))
             {
