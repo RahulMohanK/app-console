@@ -57,9 +57,14 @@ namespace ModelLibrary
 
     public class ApplicationFile
     {
+        private IFormFile file;
+
         [Required(ErrorMessage = "File must not be Empty")]
-        public IFormFile files
-        { get; set; }
+        public IFormFile File
+        {
+            get { return file; }
+            set { file = value; }
+        }
 
 
     }

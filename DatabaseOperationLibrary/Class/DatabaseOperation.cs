@@ -311,7 +311,7 @@ namespace DatabaseOperationLibrary
         }
         public void DeleteCategory(string categoryName)
         {
-             try{
+             
                 SqlCommand sqlCommand;
                 SqlDataAdapter adapter = new SqlDataAdapter();
                 sqlCommand = new SqlCommand("Proc_Console_deleteCategory", connection);
@@ -320,16 +320,12 @@ namespace DatabaseOperationLibrary
                 sqlCommand.ExecuteNonQuery();
                 sqlCommand.Dispose();
                 connection.Close();
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine("/n category deletion error"+e);
-            }
+           
         }
 
         public void DeleteProjectSpecificCategory(string projectName,string categoryName)
         {
-             try{
+             
                 SqlCommand sqlCommand;
                 SqlDataAdapter adapter = new SqlDataAdapter();
                 sqlCommand = new SqlCommand("Proc_Console_deleteProjectSpecificCategory", connection);
@@ -339,15 +335,11 @@ namespace DatabaseOperationLibrary
                 sqlCommand.ExecuteNonQuery();
                 sqlCommand.Dispose();
                 connection.Close();
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine("/n category deletion error"+e);
-            }
+            
         }
         public void DeleteApplication(int appId)
         {
-             try{
+         
                 SqlCommand sqlCommand;
                 SqlDataAdapter adapter = new SqlDataAdapter();
                 sqlCommand = new SqlCommand("Proc_Console_deleteApplication", connection);
@@ -355,18 +347,13 @@ namespace DatabaseOperationLibrary
                 sqlCommand.Parameters.AddWithValue("@App_Id", SqlDbType.Int).Value = appId;
                 sqlCommand.ExecuteNonQuery();
                 sqlCommand.Dispose();
-                connection.Close();
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine("/n application deletion error"+e);
-            }
+          
         }
 
         public void UpdateProject(string oldProjectName,string newProjectName,string newBundleIdentifier)
         {
-            try
-            {
+            
+            
                 SqlCommand sqlCommand;
                 sqlCommand = new SqlCommand("Proc_console_updateProject", connection);
                 sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -376,17 +363,12 @@ namespace DatabaseOperationLibrary
                 sqlCommand.ExecuteNonQuery();
                 sqlCommand.Dispose();
                 connection.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Sql project Updation :" + e);
-            }
+           
         }
 
          public void UpdateCategory(string oldCategoryName,string newCategoryName)
         {
-            try
-            {
+          
                 SqlCommand sqlCommand;
                 sqlCommand = new SqlCommand("Proc_console_updateCategory", connection);
                 sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -395,11 +377,7 @@ namespace DatabaseOperationLibrary
                 sqlCommand.ExecuteNonQuery();
                 sqlCommand.Dispose();
                 connection.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Sql category Updation :" + e);
-            }
+           
         }
 
 

@@ -50,7 +50,7 @@ namespace AppConsoleApi.Controllers
             {
                 return StatusCode(500,new { title = "ProjectName must not be empty", status = 500 });
             }
-            
+                
             if(!projectExists(projectName))
             {
                 return NotFound();

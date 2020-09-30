@@ -22,9 +22,8 @@ namespace FileOperationLibrary
             }
         }
 
-        public bool CreateApplicationFolder(int appId, string categoryName, string projectName, string fileName,string bundleIdentifier,ModelLibrary.ApplicationFile appFile)
+        public bool CreateApplicationFolder(int appId, string categoryName, string projectName, string fileName,string bundleIdentifier,ApplicationFile appFile)
         {
-
 
             string applicationPath = rootPath + "/" + projectName + "/" + categoryName + "/" + Convert.ToString(appId);
             Console.WriteLine(applicationPath);
@@ -35,7 +34,7 @@ namespace FileOperationLibrary
                 if(UploadApplicationFile(applicationPath,appFile))
                 {
                 FileOperationLibrary.ManifestPlist manifest = new FileOperationLibrary.ManifestPlist();
-                manifest.CreateManifest(applicationPath, applicationPath + "/" + appFile.files.FileName, bundleIdentifier, Convert.ToString(appId), projectName);
+                manifest.CreateManifest(applicationPath, applicationPath + "/" + appFile.File.FileName, bundleIdentifier, Convert.ToString(appId), projectName);
                 }
                 else
                 {
@@ -50,15 +49,15 @@ namespace FileOperationLibrary
 
         }
 
-        public bool UploadApplicationFile(string route,ModelLibrary.ApplicationFile appFile)
+        public bool UploadApplicationFile(string route,ApplicationFile appFile)
         {       
-            if(appFile.files.Length >0)
+            if(appFile.File.Length >0)
             {
                 try{
 
-                    using(FileStream filestream = System.IO.File.Create(route+"/"+appFile.files.FileName))
+                    using(FileStream filestream = System.IO.File.Create(route+"/"+appFile.File.FileName))
                     {
-                        appFile.files.CopyTo(filestream);
+                        appFile.File.CopyTo(filestream);
                         filestream.Flush();
                         return true;
                        
