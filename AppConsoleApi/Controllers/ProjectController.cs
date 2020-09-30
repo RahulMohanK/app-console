@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using  AppConsoleApi.Models;
 using DatabaseOperationLibrary;
 using FileOperationLibrary;
 using ModelLibrary;
@@ -17,35 +16,16 @@ namespace AppConsoleApi.Controllers
     [ApiController]
     public class ProjectController : ControllerBase
     {
-        private readonly AppConsoleApiContext context;
-
-        public ProjectController(AppConsoleApiContext context)
-        {
-            this.context = context;
-        }
-
 
         [HttpGet]
         public  ActionResult<IEnumerable<ModelLibrary.Project>> GetProject()
         {
             DatabaseOperation db = new DatabaseOperation();
-            return db.getProjects();
+            return db.GetProjects();
         }
 
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AppConsoleApi.Models.Project>> GetProject(int id)
-        {
-            var project = await context.Project.FindAsync(id);
-
-            if (project == null)
-            {
-                return NotFound();
-            }
-
-            return project;
-        }
-
+       
         [HttpPost]
         public ActionResult<ModelLibrary.Project> PostProject(ModelLibrary.Project project)
         {
@@ -66,7 +46,7 @@ namespace AppConsoleApi.Controllers
         }
 
         [HttpDelete("{projectName}")]
-        public  ActionResult<AppConsoleApi.Models.Project> DeleteProject(string projectName)
+        public  ActionResult<ModelLibrary.Project> DeleteProject(string projectName)
         {
             
             if(!ProjectExists(projectName))
@@ -74,7 +54,7 @@ namespace AppConsoleApi.Controllers
                 return NotFound();
             }
             DatabaseOperation db = new DatabaseOperation();
-            db.deleteProject(projectName);
+            db.DeleteProject(projectName);
             FileHierarchyCreation file = new FileHierarchyCreation();
             file.DeleteProjectFolder(projectName);
             return StatusCode(200,new { title = "Deletion successfull.", status = 200 });
@@ -84,7 +64,7 @@ namespace AppConsoleApi.Controllers
         [HttpPut("{oldProjectName}")]
         public ActionResult<ModelLibrary.Project> PutProject(string oldProjectName, ModelLibrary.Project project)
         {
-            if(!ProjectExists(oldProjectName))
+            if(!projectExists(oldProjectName))
             {
                 return NotFound();
             }
@@ -96,10 +76,10 @@ namespace AppConsoleApi.Controllers
             return StatusCode(200, new{ title = "Project updated successfully.", status = 200 });
         }
      
-        private bool ProjectExists(string projectName)
+        private bool projectExists(string projectName)
         {
            DatabaseOperation db = new DatabaseOperation();
-            if(db.getSingleProject(projectName).Count == 0)
+            if(db.GetSingleProject(projectName).Count == 0)
             {
                 return false;
             }

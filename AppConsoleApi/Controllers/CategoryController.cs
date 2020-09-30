@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AppConsoleApi.Models;
 using DatabaseOperationLibrary;
 using FileOperationLibrary;
 using ModelLibrary;
@@ -16,20 +15,14 @@ namespace AppConsoleApi.Controllers
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly AppConsoleApiContext context;
-
-        public CategoryController(AppConsoleApiContext context)
-        {
-            this.context = context;
-        }
-
+        
 
         [HttpGet]
         [ActionName("getCategory")]
         public  ActionResult<IEnumerable<ModelLibrary.Category>> GetCategory()
         {
             DatabaseOperation db = new DatabaseOperation();
-            return db.getCategories();
+            return db.GetCategories();
         }
 
 
@@ -38,7 +31,7 @@ namespace AppConsoleApi.Controllers
         public ActionResult<IEnumerable<ModelLibrary.Category>> GetProjectSpecificCategory(string projectName)
         {
             DatabaseOperation db = new DatabaseOperation();
-            return db.getProjectSpecificCategory(projectName);
+            return db.GetProjectSpecificCategory(projectName);
         }
 
         [HttpPost]
@@ -59,7 +52,7 @@ namespace AppConsoleApi.Controllers
 
         [HttpDelete("{categoryName}")]
         [ActionName("deleteCategory")]
-        public ActionResult<AppConsoleApi.Models.Category> DeleteCategory(string categoryName)
+        public ActionResult<ModelLibrary.Category> DeleteCategory(string categoryName)
         {   
             
             if(!CategoryExists(categoryName))
@@ -67,7 +60,7 @@ namespace AppConsoleApi.Controllers
                 return NotFound();
             }
             DatabaseOperation db = new DatabaseOperation();
-            db.deleteCategory(categoryName);
+            db.DeleteCategory(categoryName);
             FileHierarchyCreation file = new FileHierarchyCreation();
             file.DeleteCategoryFolder(categoryName);
             return StatusCode(200,new { title = "Applicaton deleted successfully.", status = 200 });
@@ -75,7 +68,7 @@ namespace AppConsoleApi.Controllers
 
         [HttpDelete("{projectName}/{categoryName}")]
         [ActionName("deleteSpecificCategory")]
-        public ActionResult<AppConsoleApi.Models.Category> DeleteCategory(string projectName,string categoryName)
+        public ActionResult<ModelLibrary.Category> DeleteCategory(string projectName,string categoryName)
         {   
            
             if(!projectSpecificCategoryExists(projectName,categoryName))
@@ -83,7 +76,7 @@ namespace AppConsoleApi.Controllers
                 return NotFound();
             }
             DatabaseOperation db = new DatabaseOperation();
-            db.deleteProjectSpecificCategory(projectName,categoryName);
+            db.DeleteProjectSpecificCategory(projectName,categoryName);
             FileHierarchyCreation file = new FileHierarchyCreation();
             file.DeleteSpecificCategoryFolder(projectName,categoryName);
             return StatusCode(200,new { title = "Applicaton deleted successfully.", status = 200 });
@@ -94,7 +87,7 @@ namespace AppConsoleApi.Controllers
         [ActionName("updateCategory")]
         public ActionResult<ModelLibrary.Category> PutCategory(string oldCategoryName, ModelLibrary.Category category)
         {
-            if(!CategoryExists(oldCategoryName))
+            if(!categoryExists(oldCategoryName))
             {
                 return NotFound();
             }
@@ -105,10 +98,10 @@ namespace AppConsoleApi.Controllers
             return StatusCode(200, new{ title = "Category updated successfully.", status = 200 });
         }
  
-        private bool CategoryExists(string categoryName)
+        private bool categoryExists(string categoryName)
         {
             DatabaseOperation db = new DatabaseOperation();
-            if(db.getSingleCategory(categoryName).Count == 0)
+            if(db.GetSingleCategory(categoryName).Count == 0)
             {
                 return false;
             }
@@ -120,7 +113,7 @@ namespace AppConsoleApi.Controllers
         {
              DatabaseOperation db = new DatabaseOperation();
              List<ModelLibrary.Category> categoryList = new List<ModelLibrary.Category>();
-             categoryList = db.getProjectSpecificCategory(projectName);
+             categoryList = db.GetProjectSpecificCategory(projectName);
             foreach(var val in categoryList)
             {
                 if(val.CategoryName == categoryName)

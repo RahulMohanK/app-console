@@ -59,7 +59,7 @@ namespace DatabaseOperationLibrary
             Console.WriteLine("yes");
         }
 
-        public List<Project> getProjects()
+        public List<Project> GetProjects()
         {
             List<Project> projectList = new List<Project>();
             SqlCommand sqlCommand;
@@ -87,7 +87,7 @@ namespace DatabaseOperationLibrary
             return projectList;
         }
 
-        public List<Category> getCategories()
+        public List<Category> GetCategories()
         {
             List<Category> categoryList = new List<Category>();
             SqlCommand sqlCommand;
@@ -114,7 +114,7 @@ namespace DatabaseOperationLibrary
             return categoryList;
         }
 
-        public List<Category> getProjectSpecificCategory(string projectName)
+        public List<Category> GetProjectSpecificCategory(string projectName)
         {
             List<ModelLibrary.Category> categoryList = new List<ModelLibrary.Category>();
             SqlCommand sqlCommand;
@@ -141,7 +141,7 @@ namespace DatabaseOperationLibrary
             return categoryList;     
         }
 
-        public Application getSingleApplication(string projectName, string categoryName, string fileName)
+        public Application GetSingleApplication(string projectName, string categoryName, string fileName)
         {
             Application app = new Application();
             SqlCommand sqlCommand;
@@ -158,7 +158,7 @@ namespace DatabaseOperationLibrary
                 while (sqlDataReader.Read())
                 {
                     app.AppId = (int)sqlDataReader.GetValue(0);
-                    Console.WriteLine("get Application" + Convert.ToString(app.AppId));
+                   // Console.WriteLine("get Application" + Convert.ToString(app.AppId));
                     app.ProjectName = sqlDataReader.GetValue(1).ToString();
                     app.CategoryName = sqlDataReader.GetValue(2).ToString();
                     app.FileName = sqlDataReader.GetValue(3).ToString();
@@ -173,7 +173,38 @@ namespace DatabaseOperationLibrary
             return app;
         }
 
-        public List<ModelLibrary.Category> getSingleCategory(string categoryName)
+        public List<ModelLibrary.Application> GetSingleApp(int appId)
+        {
+            List<ModelLibrary.Application> appList = new List<ModelLibrary.Application>();
+            SqlCommand sqlCommand;
+            SqlDataReader sqlDataReader;
+            sqlCommand = new SqlCommand("Proc_Console_getSingleApp", connection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.AddWithValue("@App_Id", SqlDbType.Int).Value = appId;
+            sqlDataReader = sqlCommand.ExecuteReader();
+
+            if (sqlDataReader.HasRows)
+            {
+                while (sqlDataReader.Read())
+                {
+                    ModelLibrary.Application app= new ModelLibrary.Application();
+                    app.AppId = (int)sqlDataReader.GetValue(0);
+                    app.ProjectName = sqlDataReader.GetValue(1).ToString();
+                    app.CategoryName = sqlDataReader.GetValue(2).ToString();
+                    app.FileName = sqlDataReader.GetValue(3).ToString();
+                    app.UploadedDate = (DateTime)sqlDataReader.GetValue(4);
+                    appList.Add(app);
+                }
+            }
+
+            sqlDataReader.Close();
+            sqlCommand.Dispose();
+            connection.Close();
+
+            return appList;
+        }
+
+        public List<ModelLibrary.Category> GetSingleCategory(string categoryName)
         {
              List<ModelLibrary.Category> categoryList = new List<ModelLibrary.Category>();
             SqlCommand sqlCommand;
@@ -199,7 +230,7 @@ namespace DatabaseOperationLibrary
             connection.Close();
             return categoryList;
         }
-         public List<ModelLibrary.Project> getSingleProject(string projectName)
+         public List<ModelLibrary.Project> GetSingleProject(string projectName)
         {
              List<ModelLibrary.Project> projectList = new List<ModelLibrary.Project>();
             SqlCommand sqlCommand;
@@ -229,7 +260,7 @@ namespace DatabaseOperationLibrary
             return projectList;
         }
 
-        public List<Application> getApplications(string projectName,string categoryName)
+        public List<Application> GetApplications(string projectName,string categoryName)
         {
             List<Application> appList = new List<Application>();
             SqlCommand sqlCommand;
@@ -262,7 +293,7 @@ namespace DatabaseOperationLibrary
             return appList;
         }
 
-        public void deleteProject(string projectName)
+        public void DeleteProject(string projectName)
         {
             try{
                 SqlCommand sqlCommand;
@@ -280,7 +311,7 @@ namespace DatabaseOperationLibrary
             }
 
         }
-        public void deleteCategory(string categoryName)
+        public void DeleteCategory(string categoryName)
         {
              try{
                 SqlCommand sqlCommand;
@@ -298,7 +329,7 @@ namespace DatabaseOperationLibrary
             }
         }
 
-        public void deleteProjectSpecificCategory(string projectName,string categoryName)
+        public void DeleteProjectSpecificCategory(string projectName,string categoryName)
         {
              try{
                 SqlCommand sqlCommand;
@@ -316,7 +347,7 @@ namespace DatabaseOperationLibrary
                 Console.WriteLine("/n category deletion error"+e);
             }
         }
-        public void deleteApplication(int appId)
+        public void DeleteApplication(int appId)
         {
              try{
                 SqlCommand sqlCommand;

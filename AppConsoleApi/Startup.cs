@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using AppConsoleApi.Models;
+
 namespace AppConsoleApi
 {
     public class Startup
@@ -28,7 +28,7 @@ namespace AppConsoleApi
         {
             //  services.AddControllersWithViews()
             //     .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            services.AddDbContext<AppConsoleApiContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("ConsoleDatabase")));
+            //services.AddDbContext<AppConsoleApiContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("ConsoleDatabase")));
             services.AddControllers();
         }
 
