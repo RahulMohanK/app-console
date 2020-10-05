@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using Microsoft.AspNetCore.Http;
 
 namespace ModelLibrary
 {
@@ -31,6 +32,16 @@ namespace ModelLibrary
         {
             get { return bundleIdentifier; }
             set { bundleIdentifier = value; }
+        }
+    }
+    public class ProjectIcon
+    {
+        private IFormFile icon;
+
+        public IFormFile Icon
+        {
+            get{return icon;}
+            set {icon = value;}
         }
     }
 }

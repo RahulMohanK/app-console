@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Xml;
 
+
 namespace FileOperationLibrary
 {
     public class ManifestPlist
@@ -46,6 +47,17 @@ namespace FileOperationLibrary
                 writer.WriteEndElement();
                 writer.Flush();
             }
+        }
+
+        public void EditManifest(string filePath, String newUrl)
+        {  
+             //identifiying url with array index
+            XmlDocument document = new XmlDocument();
+            document.Load(filePath + "/manifest.plist");
+            XmlNodeList elemList = document.GetElementsByTagName("string");
+            elemList[1].InnerXml = newUrl;
+            document.Save(filePath + "/manifest.plist");
+           
         }
     }
 }

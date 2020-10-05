@@ -39,7 +39,7 @@ namespace ModelLibrary
 
         [Required(ErrorMessage = "FileName must not be null")]
         [DataType(DataType.Text)]
-        [RegularExpression("^[a-zA-Z. ]+$", ErrorMessage = "FileName not allowed. Filename can contain((a-z),(A-Z),(.),(_),(-))")]
+       // [RegularExpression("^[a-zA-Z0-9_\-. ]+$", ErrorMessage = "FileName not allowed. Filename can contain((a-z),(A-Z),(.),(_),(-))")]
         public string FileName
         {
             get { return fileName; }
