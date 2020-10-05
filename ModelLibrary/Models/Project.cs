@@ -37,7 +37,7 @@ namespace ModelLibrary
     public class ProjectIcon
     {
         private IFormFile icon;
-
+        [Required(ErrorMessage = "Project Icon must be uploaded")]
         public IFormFile Icon
         {
             get{return icon;}

@@ -14,13 +14,36 @@ namespace FileOperationLibrary
         {
             rootPath = ConfigurationManager.AppSettings["filerootpath"];
         }
-        public void CreateProjectFolder(string fileName)
+        public void CreateProjectFolder(string fileName,ProjectIcon icon)
         {
             string pathString = System.IO.Path.Combine(rootPath, fileName);
             if (FileExists(pathString) == false)
             {
                 System.IO.Directory.CreateDirectory(pathString);
+                Directory.CreateDirectory(Path.Combine(pathString,"Assets"));
+                uploadProjectIcon(Path.Combine(pathString,"Assets"),icon);
             }
+        }
+        
+        private bool uploadProjectIcon(string route,ProjectIcon icon)
+        {
+             if (icon.Icon.Length > 0)
+            {
+                try
+                {
+                    using (FileStream filestream = System.IO.File.Create(route + "/" + "icon.png"))
+                    {
+                        icon.Icon.CopyTo(filestream);
+                        filestream.Flush();
+                        return true;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Upload Icon File catch" + e);
+                }
+            }
+            return false;
         }
 
         public bool CreateApplicationFolder(int appId, string categoryName, string projectName, string fileName, string bundleIdentifier, ApplicationFile appFile)
@@ -56,18 +79,12 @@ namespace FileOperationLibrary
             {
                 try
                 {
-
                     using (FileStream filestream = System.IO.File.Create(route + "/" + appFile.File.FileName))
                     {
                         appFile.File.CopyTo(filestream);
                         filestream.Flush();
                         return true;
-
-
                     }
-
-
-
                 }
                 catch (Exception e)
                 {

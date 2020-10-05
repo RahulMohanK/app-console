@@ -25,14 +25,14 @@ namespace AppConsoleApi.Controllers
         }
      
         [HttpPost]
-        public ActionResult<Project> PostProject(Project project)
+        public ActionResult<Project> PostProject([FromForm]Project project,[FromForm]ProjectIcon icon)
         {
             try{
             DatabaseOperation db = new DatabaseOperation();
             db.AddProject(project.ProjectName, project.BundleIdentifier);
 
             FileHierarchyCreation file = new FileHierarchyCreation();
-            file.CreateProjectFolder(project.ProjectName);
+            file.CreateProjectFolder(project.ProjectName,icon);
             }
             catch(System.Data.SqlClient.SqlException)
             {
