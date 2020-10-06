@@ -34,7 +34,7 @@ namespace ModelLibrary
             set { bundleIdentifier = value; }
         }
     }
-    public class ProjectIcon
+    public class ProjectIcon    
     {
         private IFormFile icon;
         [Required(ErrorMessage = "Project Icon must be uploaded")]
