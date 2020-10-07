@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 
-namespace AppConsoleApi.Controllers
+namespace AppConsoleApi.Controllers     
 {
     [Route("[controller]")]
     [ApiController]
@@ -26,8 +26,6 @@ namespace AppConsoleApi.Controllers
             DatabaseOperation db = new DatabaseOperation();
             return db.GetApplications(projectName,categoryName);
         }
-
-
 
         [HttpPost]
         public ActionResult<Application> PostApplication([FromForm] ApplicationFile appFile,[FromForm]Application app)

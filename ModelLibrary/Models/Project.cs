@@ -8,40 +8,48 @@ namespace ModelLibrary
     public class Project
     {
 
-        private int id;
-        private string projectName;
-        private string bundleIdentifier;
+        
         public int Id
         {
-            get { return id; }
-            set { id = value; }
+            get;
+            set;
         }
 
         [Required(ErrorMessage = "ProjectName must not be null")]
         [DataType(DataType.Text)]
-        [RegularExpression("^[a-zA-Z. ]+$", ErrorMessage = "ProjectName should not contain special symbols(only (.) allowed)")]
+        [RegularExpression("^[a-zA-Z _.-]+$", ErrorMessage = "ProjectName should not contain special symbols(only (.) allowed)")]
         public string ProjectName
         {
-            get { return projectName; }
-            set { projectName = value; }
+            get;
+            set;
         }
         [Required(ErrorMessage = "BundleIdentifier must not be null")]
         [DataType(DataType.Text)]
         [RegularExpression("^[a-zA-Z. ]+$", ErrorMessage = "BundleIdentifier should not contain special symbols(only (.) allowed)")]
         public string BundleIdentifier
         {
-            get { return bundleIdentifier; }
-            set { bundleIdentifier = value; }
+            get;
+            set;
         }
     }
-    public class ProjectIcon    
+    public class ProjectIcon
     {
-        private IFormFile icon;
+       
         [Required(ErrorMessage = "Project Icon must be uploaded")]
         public IFormFile Icon
         {
-            get{return icon;}
-            set {icon = value;}
+            get;
+            set;
+        }
+    }
+    public class EditProjectIcon
+    {
+        
+
+        public IFormFile Icon
+        {
+            get;
+            set;
         }
     }
 }

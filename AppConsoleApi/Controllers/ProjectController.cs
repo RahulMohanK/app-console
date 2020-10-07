@@ -64,7 +64,7 @@ namespace AppConsoleApi.Controllers
 
 
         [HttpPut("{oldProjectName}")]
-        public ActionResult<Project> PutProject(string oldProjectName, Project project)
+        public ActionResult<Project> PutProject(string oldProjectName,[FromForm] Project project,[FromForm]EditProjectIcon icon)
         {
             if(!projectExists(oldProjectName))
             {
@@ -73,7 +73,7 @@ namespace AppConsoleApi.Controllers
             DatabaseOperation db = new DatabaseOperation();
             db.UpdateProject(oldProjectName,project.ProjectName,project.BundleIdentifier);
             FileHierarchyCreation file = new FileHierarchyCreation();
-            file.EditProjectFolder(oldProjectName,project.ProjectName,project.BundleIdentifier);
+            file.EditProjectFolder(oldProjectName,project.ProjectName,project.BundleIdentifier,icon);
 
             return StatusCode(200, new{ title = "Project updated successfully.", status = 200 });
         }

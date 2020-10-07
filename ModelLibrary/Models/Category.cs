@@ -6,21 +6,20 @@ namespace ModelLibrary
 {
     public class Category
     {
-        private int id;
-        private string categoryName;
+      
         public int Id
         {
-            get { return id; }
-            set { id = value; }
+            get ;
+            set;
         }
 
         [Required(ErrorMessage = "Category Name must not be null")]
         [DataType(DataType.Text)]
-        [RegularExpression("^[a-zA-Z. ]+$", ErrorMessage = "CategoryName should not contain special symbols(only (.) allowed)")]
+        [RegularExpression("^[a-zA-Z _.-]+$", ErrorMessage = "CategoryName should not contain special symbols(only (.,-,_) allowed)")]
         public string CategoryName
         {
-            get { return categoryName; }
-            set { categoryName = value; }
+            get ;
+            set;
         }
     }
 }

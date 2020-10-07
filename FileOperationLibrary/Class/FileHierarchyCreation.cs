@@ -14,20 +14,20 @@ namespace FileOperationLibrary
         {
             rootPath = ConfigurationManager.AppSettings["filerootpath"];
         }
-        public void CreateProjectFolder(string fileName,ProjectIcon icon)
+        public void CreateProjectFolder(string fileName, ProjectIcon icon)
         {
             string pathString = System.IO.Path.Combine(rootPath, fileName);
             if (FileExists(pathString) == false)
             {
                 System.IO.Directory.CreateDirectory(pathString);
-                Directory.CreateDirectory(Path.Combine(pathString,"Assets"));
-                uploadProjectIcon(Path.Combine(pathString,"Assets"),icon);
+                Directory.CreateDirectory(Path.Combine(pathString, "Assets"));
+                uploadProjectIcon(Path.Combine(pathString, "Assets"), icon);
             }
         }
-        
-        private bool uploadProjectIcon(string route,ProjectIcon icon)
+
+        private bool uploadProjectIcon(string route, ProjectIcon icon)
         {
-             if (icon.Icon.Length > 0)
+            if (icon.Icon.Length > 0)
             {
                 try
                 {
@@ -103,11 +103,39 @@ namespace FileOperationLibrary
             }
         }
 
-
-        public void EditProjectFolder(string oldProjectName, string newProjectName, string bundleIdentifier)
+        public void EditProjectIcon(string route, EditProjectIcon icon)
+        {
+            try
+            {
+                if (icon.Icon.Length > 0)
+                {
+                    Console.WriteLine("not null");
+                    File.Delete(route + "/Assets/" + "icon.png");
+                    try
+                    {
+                        using (FileStream filestream = System.IO.File.Create(route + "/Assets/" + "icon.png"))
+                        {
+                            icon.Icon.CopyTo(filestream);
+                            filestream.Flush();
+                           
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Edit icon File catch" + e);
+                    }
+                }
+            }
+            catch (Exception)//icon file null exception
+            {
+                Console.WriteLine("null");
+            }
+        }
+        public void EditProjectFolder(string oldProjectName, string newProjectName, string bundleIdentifier, EditProjectIcon icon)
         {
             string[] dirs = System.IO.Directory.GetDirectories(rootPath);
             char[] spearator = { '\\' };
+
             try
             {
                 foreach (var dir in dirs)
@@ -116,6 +144,7 @@ namespace FileOperationLibrary
                     if (dir.Split(spearator)[1] == oldProjectName)
                     {
                         Console.WriteLine("Edited :" + dir.Split(spearator)[1]);
+                        EditProjectIcon(rootPath + "/" + oldProjectName, icon);
                         System.IO.Directory.Move(rootPath + "/" + oldProjectName, rootPath + "/" + newProjectName);
                         break;
                     }
@@ -125,6 +154,7 @@ namespace FileOperationLibrary
             catch (Exception)
             {
                 Console.WriteLine("old and new project names are same");
+                //  Console.WriteLine("icon "+icon.Icon.Length);
             }
             string[] categoryDirs = System.IO.Directory.GetDirectories(rootPath + "/" + newProjectName);
             foreach (var category in categoryDirs)
@@ -141,7 +171,7 @@ namespace FileOperationLibrary
                         File.Delete(app + "/manifest.plist");
                         FileOperationLibrary.ManifestPlist manifest = new FileOperationLibrary.ManifestPlist();
                         manifest.CreateManifest(app.Replace('\\', '/'), appFile[0].Replace('\\', '/'), bundleIdentifier, Convert.ToString(details[3]), newProjectName);
-                        Console.WriteLine(appFile[0]);
+                        //  Console.WriteLine(appFile[0]);
                     }
 
 
@@ -170,10 +200,10 @@ namespace FileOperationLibrary
 
                             string[] appFile = Directory.GetFiles(app, "*.ipa");
                             if (appFile.Length == 1)
-                            {    
+                            {
                                 string[] details = appFile[0].Split(separator);
                                 FileOperationLibrary.ManifestPlist manifest = new FileOperationLibrary.ManifestPlist();
-                                manifest.EditManifest(app,appFile[0].Replace('\\', '/'));
+                                manifest.EditManifest(app, appFile[0].Replace('\\', '/'));
                             }
 
                         }
@@ -280,7 +310,7 @@ namespace FileOperationLibrary
         {
             if (System.IO.Directory.Exists(path))
             {
-                Console.WriteLine("folder exist");
+                // Console.WriteLine("folder exist");
                 return true;
             }
             return false;

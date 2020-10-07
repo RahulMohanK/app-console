@@ -7,15 +7,11 @@ namespace ModelLibrary
 {
     public class Application
     {
-        private int appId;
-        private string projectName;
-        private string categoryName;
-        private string fileName;
-        private DateTime uploadedDate;
+        
         public int AppId
         {
-            get { return appId; }
-            set { appId = value; }
+            get ;
+            set ;
         }
 
         [Required(ErrorMessage = "Project Name must not be null")]
@@ -23,8 +19,8 @@ namespace ModelLibrary
         [RegularExpression("^[a-zA-Z. ]+$", ErrorMessage = "ProjectName should not contain special symbols(only (.) allowed)")]
         public string ProjectName
         {
-            get { return projectName; }
-            set { projectName = value; }
+            get ;
+            set;
 
         }
 
@@ -33,8 +29,8 @@ namespace ModelLibrary
         [RegularExpression("^[a-zA-Z. ]+$", ErrorMessage = "CategoryName should not contain special symbols(only (.) allowed)")]
         public string CategoryName
         {
-            get { return categoryName; }
-            set { categoryName = value; }
+            get ;
+            set ;
         }
 
         [Required(ErrorMessage = "FileName must not be null")]
@@ -42,14 +38,14 @@ namespace ModelLibrary
        // [RegularExpression("^[a-zA-Z0-9_\-. ]+$", ErrorMessage = "FileName not allowed. Filename can contain((a-z),(A-Z),(.),(_),(-))")]
         public string FileName
         {
-            get { return fileName; }
-            set { fileName = value; }
+            get ;
+            set ;
         }
 
         public DateTime UploadedDate
         {
-            get { return uploadedDate; }
-            set { uploadedDate = value; }
+            get ;
+            set ;
         }
 
 
@@ -57,13 +53,13 @@ namespace ModelLibrary
 
     public class ApplicationFile
     {
-        private IFormFile file;
+       
 
         [Required(ErrorMessage = "File must not be Empty")]
         public IFormFile File
         {
-            get { return file; }
-            set { file = value; }
+            get ;
+            set ;
         }
 
 
