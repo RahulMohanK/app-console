@@ -9,10 +9,13 @@ namespace FileOperationLibrary
 {
     public class FileHierarchyCreation
     {
-        string rootPath;
+        string rootPath,ipaRootPath;
         public FileHierarchyCreation()
         {
-            rootPath = ConfigurationManager.AppSettings["filerootpath"];
+            ipaRootPath = ConfigurationManager.AppSettings["iparootpath"];
+            rootPath = Path.Combine(Directory.GetCurrentDirectory(), @"wwwroot/Main").Replace('\\','/');
+           // Console.WriteLine(rootPath);
+
         }
         public void CreateProjectFolder(string fileName, ProjectIcon icon)
         {
@@ -50,7 +53,8 @@ namespace FileOperationLibrary
         {
 
             string applicationPath = rootPath + "/" + projectName + "/" + categoryName + "/" + Convert.ToString(appId);
-            Console.WriteLine(applicationPath);
+            string ipaPath = ipaRootPath+ "/" + projectName + "/" + categoryName + "/" + Convert.ToString(appId);
+           // Console.WriteLine(applicationPath);
             CreateCategoryFolder(projectName, categoryName);
             if (FileExists(applicationPath) == false)
             {
@@ -58,11 +62,11 @@ namespace FileOperationLibrary
                 if (UploadApplicationFile(applicationPath, appFile))
                 {
                     FileOperationLibrary.ManifestPlist manifest = new FileOperationLibrary.ManifestPlist();
-                    manifest.CreateManifest(applicationPath, applicationPath + "/" + appFile.File.FileName, bundleIdentifier, Convert.ToString(appId), projectName);
+                    manifest.CreateManifest(applicationPath, ipaPath + "/" + appFile.File.FileName, bundleIdentifier, Convert.ToString(appId), projectName);
                 }
                 else
                 {
-                    Console.WriteLine("file upload error");
+                   // Console.WriteLine("file upload error");
                     return false;
                 }
                 return true;
@@ -109,7 +113,7 @@ namespace FileOperationLibrary
             {
                 if (icon.Icon.Length > 0)
                 {
-                    Console.WriteLine("not null");
+                    //Console.WriteLine("not null");
                     File.Delete(route + "/Assets/" + "icon.png");
                     try
                     {
@@ -126,9 +130,9 @@ namespace FileOperationLibrary
                     }
                 }
             }
-            catch (Exception)//icon file null exception
+            catch (Exception)//icon file null exception 
             {
-                Console.WriteLine("null");
+               // Console.WriteLine("null");
             }
         }
         public void EditProjectFolder(string oldProjectName, string newProjectName, string bundleIdentifier, EditProjectIcon icon)
@@ -143,7 +147,7 @@ namespace FileOperationLibrary
 
                     if (dir.Split(spearator)[1] == oldProjectName)
                     {
-                        Console.WriteLine("Edited :" + dir.Split(spearator)[1]);
+                        //Console.WriteLine("Edited :" + dir.Split(spearator)[1]);
                         EditProjectIcon(rootPath + "/" + oldProjectName, icon);
                         System.IO.Directory.Move(rootPath + "/" + oldProjectName, rootPath + "/" + newProjectName);
                         break;
@@ -153,7 +157,7 @@ namespace FileOperationLibrary
             }
             catch (Exception)
             {
-                Console.WriteLine("old and new project names are same");
+               //Console.WriteLine("old and new project names are same");
                 //  Console.WriteLine("icon "+icon.Icon.Length);
             }
             string[] categoryDirs = System.IO.Directory.GetDirectories(rootPath + "/" + newProjectName);
@@ -169,9 +173,17 @@ namespace FileOperationLibrary
                     {
                         string[] details = appFile[0].Split(spearator);
                         File.Delete(app + "/manifest.plist");
+                        string ipaFilePath="";
+                        string toBeSearched = "Main";
+                        int ix = appFile[0].IndexOf(toBeSearched);
+                        if (ix != -1) 
+                        {
+                         ipaFilePath = ipaRootPath+appFile[0].Substring(ix + toBeSearched.Length);
+                        }
+                        string tempId = appFile[0].Substring(ix + toBeSearched.Length);
                         FileOperationLibrary.ManifestPlist manifest = new FileOperationLibrary.ManifestPlist();
-                        manifest.CreateManifest(app.Replace('\\', '/'), appFile[0].Replace('\\', '/'), bundleIdentifier, Convert.ToString(details[3]), newProjectName);
-                        //  Console.WriteLine(appFile[0]);
+                        manifest.CreateManifest(app.Replace('\\', '/'), ipaFilePath.Replace('\\', '/'), bundleIdentifier, Convert.ToString(tempId.Split(spearator)[2]), newProjectName);
+                
                     }
 
 
@@ -203,7 +215,8 @@ namespace FileOperationLibrary
                             {
                                 string[] details = appFile[0].Split(separator);
                                 FileOperationLibrary.ManifestPlist manifest = new FileOperationLibrary.ManifestPlist();
-                                manifest.EditManifest(app, appFile[0].Replace('\\', '/'));
+                                manifest.EditManifest(app, ipaRootPath+"/"+details[1]+"/"+details[2]+"/"+details[3]);
+
                             }
 
                         }
@@ -315,7 +328,5 @@ namespace FileOperationLibrary
             }
             return false;
         }
-
-
     }
 }

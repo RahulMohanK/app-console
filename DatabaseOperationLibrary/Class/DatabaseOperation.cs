@@ -69,7 +69,7 @@ namespace DatabaseOperationLibrary
             sqlCommand.ExecuteNonQuery();
             sqlCommand.Dispose();
             connection.Close();
-            Console.WriteLine("yes");
+            //Console.WriteLine("yes");
         }
 
         public void AddCategory(string categoryName)
@@ -81,7 +81,7 @@ namespace DatabaseOperationLibrary
             sqlCommand.ExecuteNonQuery();
             sqlCommand.Dispose();
             connection.Close();
-            Console.WriteLine("yes");
+          //  Console.WriteLine("yes");
         }
 
         public void AddApplication(string projectName, string categoryName, string fileName)
@@ -95,7 +95,7 @@ namespace DatabaseOperationLibrary
             sqlCommand.ExecuteNonQuery();
             sqlCommand.Dispose();
             connection.Close();
-            Console.WriteLine("yes");
+           // Console.WriteLine("yes");
         }
 
         public List<Project> GetProjects()

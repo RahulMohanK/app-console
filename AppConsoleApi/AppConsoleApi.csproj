@@ -10,6 +10,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.8"/>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4"/>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3"/>
+    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DatabaseoperationLibrary\DatabaseOperationLibrary.csproj"/>

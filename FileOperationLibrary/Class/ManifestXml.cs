@@ -51,11 +51,13 @@ namespace FileOperationLibrary
 
         public void EditManifest(string filePath, String newUrl)
         {  
+            //Console.WriteLine("edit filrpath:"+filePath);
+            //Console.WriteLine("edit newUrl:"+newUrl);
              //identifiying url with array index
             XmlDocument document = new XmlDocument();
             document.Load(filePath + "/manifest.plist");
             XmlNodeList elemList = document.GetElementsByTagName("string");
-            elemList[1].InnerXml = newUrl;
+            elemList[1].InnerXml = newUrl.Replace('\\','/');
             document.Save(filePath + "/manifest.plist");
            
         }
