@@ -26,6 +26,8 @@ namespace AppConsoleApi
         }
 
         public IConfiguration Configuration { get; }
+      //  readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -33,6 +35,16 @@ namespace AppConsoleApi
             //  services.AddControllersWithViews()
             //     .AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             //services.AddDbContext<AppConsoleApiContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("ConsoleDatabase")));
+
+            //  services.AddCors(options =>
+            //     {
+            // options.AddPolicy(name: MyAllowSpecificOrigins,
+            //                   builder =>
+            //                   {
+            //                       builder.WithOrigins("https://console.dev.grcdemo.com",
+            //                                             "https://local.console.dev.grcdemo.com");
+            //                   });
+            //     });
             services.AddControllers();
         }
 
@@ -52,6 +64,7 @@ namespace AppConsoleApi
 
            
             app.UseCors(options => options.WithOrigins("*","*","*"));
+            //app.UseCors(MyAllowSpecificOrigins);
             
             app.UseEndpoints(endpoints =>
             {
